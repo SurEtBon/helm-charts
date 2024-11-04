@@ -1,0 +1,36 @@
+ingress:
+  web:
+    enabled: True
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - name: ${AIRFLOW_HOSTNAME}
+        tls:
+          enabled: true
+          secretName: airflow-tls
+fernetKey: ${AIRFLOW_FERNET_KEY}
+webserverSecretKey: ${AIRFLOW_SECRET_KEY}
+airflow:
+  logs:
+    persistence:
+      enabled: true
+      size: 12Gi
+webserver:
+  defaultUser:
+    enabled: true
+    role: Admin
+    username: ${AIRFLOW_USERNAME}
+    email: ${AIRFLOW_EMAIL}
+    firstName: ${AIRFLOW_FIRST_NAME}
+    lastName: ${AIRFLOW_LAST_NAME}
+    password: ${AIRFLOW_PASSWORD}
+dags:
+  persistence:
+    enabled: true
+    size: 1Gi
+  gitSync:
+    enabled: true
+    repo: ${AIRFLOW_DAGS_REPO}
+    branch: main
+    rev: HEAD
